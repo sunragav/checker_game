@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Idealo</string>
+
+    <string name="coordinate_out_of_bounds">\"Invalid coordinates found in the input\"</string>
+    <string name="no_drawable_for_coin">\"Invalid coordinates found in the input\"</string>
+    <string name="unknown_error">\"An error has occurred\"</string>
+    <string name="input_missing">\"Could not find the input file for the moves\"</string>
+    <string name="empty_input">\"The input file is empty\"</string>
+    <string name="end_of_the_movie">The End!!</string>
+    <string name="play_movie">Play movie</string>
+</resources>
