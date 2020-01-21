@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.sunragav.boardview.R
 import com.sunragav.boardview.domain.models.Frame
+import kotlin.math.max
 import kotlin.math.min
 
 
@@ -175,7 +176,7 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
 
         configureTilesPaint()
-        coinSize = dpToPx(min(coinSize, tileSize.toFloat() - 10))
+        coinSize = min(dpToPx(coinSize), tileSize/4f*3f)
 
         globalXOffset = (displayWidth - tileSize * size) / 2f
 
