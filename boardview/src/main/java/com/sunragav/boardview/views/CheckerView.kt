@@ -167,7 +167,7 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
 
         configureTilesPaint()
-        coinSize = dpToPx(min(coinSize, tileSizeInDP - 10))
+        coinSize = min(coinSize, tileSize*3/4f)
 
 
         coinCoordScaleFactor = tileSize.toFloat()
