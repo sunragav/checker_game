@@ -164,11 +164,8 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         checkerBitmap =
             Bitmap.createBitmap(tileSize * size, tileSize * size, Bitmap.Config.ARGB_8888)
 
-
-
         configureTilesPaint()
         coinSize = min(coinSize, tileSize*3/4f)
-
 
         coinCoordScaleFactor = tileSize.toFloat()
         coinCoordScaleOffset = (tileSize - coinSize) / 2f
