@@ -28,7 +28,6 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private var coinR = BitmapFactory.decodeResource(resources, R.drawable.player_r)
     private var coinG = BitmapFactory.decodeResource(resources, R.drawable.player_g)
     private var coinB = BitmapFactory.decodeResource(resources, R.drawable.player_b)
-    private var dummy = BitmapFactory.decodeResource(resources, R.drawable.dummy)
     private var coinSize: Float = coinB.width.toFloat()
     private val paint = Paint()
     private var size = 0
@@ -176,7 +175,6 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         coinR = getResizedBitmap(coinR, coinSize)
         coinG = getResizedBitmap(coinG, coinSize)
         coinB = getResizedBitmap(coinB, coinSize)
-        dummy = getResizedBitmap(dummy, coinSize)
     }
 
     override fun onDetachedFromWindow() {
