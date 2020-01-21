@@ -19,7 +19,6 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     }
 
-
     private val defaultOddColor = Color.parseColor(DEFAULT_ODD_COLOR)
     private var coinCoordScaleOffset: Float = 0f
     private var coinCoordScaleFactor: Float = 1f
@@ -33,12 +32,8 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private var coinSize: Float = coinB.width.toFloat()
     private val paint = Paint()
     private var size = 0
-    private var screenSize = 0
     private var tileSize = 0
-    private var checkerBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-    private var rCheckerBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-    private var bCheckerBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-    private var gCheckerBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+    private lateinit var checkerBitmap: Bitmap
 
     init {
         paint.isAntiAlias = true
@@ -78,7 +73,6 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     override fun onDraw(canvas: Canvas) {
         // call the super method to keep any drawing from the parent side.
         super.onDraw(canvas)
-        configurePaint()
         drawCheckerBoard(canvas)
         currentFrame?.let {
             drawPieces(canvas)
@@ -91,7 +85,7 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         canvas.drawBitmap(checkerBitmap, 0f, 0f, paint)
     }
 
-    private fun configurePaint() {
+    private fun configureTilesPaint() {
         val bitmap = Bitmap.createBitmap(tileSize * 2, tileSize * 2, Bitmap.Config.ARGB_8888)
 
         val bitmapPaint = Paint(ANTI_ALIAS_FLAG)
@@ -157,7 +151,7 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        screenSize = min(measuredWidth, measuredHeight)
+        val screenSize = min(measuredWidth, measuredHeight)
 
         setMeasuredDimension(screenSize, screenSize)
     }
@@ -173,7 +167,7 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
 
 
-        configurePaint()
+        configureTilesPaint()
         coinSize = dpToPx(min(coinSize, tileSizeInDP - 10))
 
 
@@ -191,8 +185,5 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         coinR.recycle()
         coinG.recycle()
         checkerBitmap.recycle()
-        rCheckerBitmap.recycle()
-        gCheckerBitmap.recycle()
-        bCheckerBitmap.recycle()
     }
 }
