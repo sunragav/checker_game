@@ -22,6 +22,7 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private val defaultOddColor = Color.parseColor(DEFAULT_ODD_COLOR)
     private var coinCoordScaleOffset: Float = 0f
     private var coinCoordScaleFactor: Float = 1f
+    private var globalXOffset: Float = 0f
     private var oddColor = defaultOddColor
     private var evenColor = DEFAULT_EVEN_COLOR
     private var tileSizeInDP = DEFAULT_TILE_SIZE_IN_DP
@@ -81,7 +82,7 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private fun dpToPx(dp: Float) = dp * context.resources.displayMetrics.density
 
     private fun drawCheckerBoard(canvas: Canvas) {
-        canvas.drawBitmap(checkerBitmap, 0f, 0f, paint)
+        canvas.drawBitmap(checkerBitmap, globalXOffset, 0f, paint)
     }
 
     private fun configureTilesPaint() {
@@ -106,6 +107,7 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         rect.offset(tileSize, -tileSize)
         canvas.drawRect(rect, bitmapPaint)
 
+
         val checkerPaint = Paint(ANTI_ALIAS_FLAG)
         checkerPaint.shader = BitmapShader(
             bitmap,
@@ -117,6 +119,7 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         val checkerBoardCanvas = Canvas(checkerBitmap)
 
         checkerBoardCanvas.drawPaint(checkerPaint)
+        bitmap.recycle()
     }
 
     private fun drawPieces(canvas: Canvas) {
@@ -129,7 +132,7 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         val x = currentFrame.x * coinCoordScaleFactor + coinCoordScaleOffset
         val y = (size - 1 - currentFrame.y) * coinCoordScaleFactor + coinCoordScaleOffset
 
-        canvas.drawBitmap(coin, x, y, paint)
+        canvas.drawBitmap(coin, x+globalXOffset, y, paint)
     }
 
 
@@ -149,26 +152,32 @@ class CheckerView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-
-        val screenSize = min(measuredWidth, measuredHeight)
-
+        val displayWidth = context.resources.displayMetrics.widthPixels
+        val displayHeight = context.resources.displayMetrics.heightPixels
+        val screenSize = min(displayWidth, displayHeight)
+        //adjustSizes(screenSize)
         setMeasuredDimension(screenSize, screenSize)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        tileSize = if (tileSizeInDP == 0f)
+        adjustSizes(min(w, h))
+    }
+
+    private fun adjustSizes(w: Int) {
+        val displayWidth = context.resources.displayMetrics.widthPixels
+        tileSize =
             w / size
-        else
-            dpToPx(tileSizeInDP).toInt()
+
         checkerBitmap =
             Bitmap.createBitmap(tileSize * size, tileSize * size, Bitmap.Config.ARGB_8888)
 
 
 
         configureTilesPaint()
-        coinSize = dpToPx(min(coinSize, tileSizeInDP - 10))
+        coinSize = dpToPx(min(coinSize, tileSize.toFloat() - 10))
 
+        globalXOffset = (displayWidth - tileSize * size) / 2f
 
         coinCoordScaleFactor = tileSize.toFloat()
         coinCoordScaleOffset = (tileSize - coinSize) / 2f
